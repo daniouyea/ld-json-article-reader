@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Article Reader</title>
+    <link rel="stylesheet" href="reader.css">
+  </head>
+  <body>
+    <main class="reader-shell">
+      <header class="reader-header">
+        <p id="articleType" class="article-type"></p>
+        <h1 id="articleTitle">Loading article...</h1>
+        <p id="articleMeta" class="article-meta"></p>
+        <a id="sourceLink" class="source-link" href="#" target="_blank" rel="noreferrer">Open source page</a>
+      </header>
+
+      <section class="reader-card">
+        <div id="articleBody" class="article-body"></div>
+        <pre id="rawMetadata" class="raw-metadata" hidden></pre>
+      </section>
+    </main>
+
+    <script src="reader.js"></script>
+  </body>
+</html>

@@ -1,0 +1,31 @@
+{
+  "ranking": {
+    "baseScores": {
+      "hasArticleBody": 100,
+      "hasTitle": 12,
+      "hasAuthor": 6,
+      "hasPublisher": 4,
+      "hasDatePublished": 4,
+      "hasDescription": 5
+    },
+    "typeScores": {
+      "article": 30,
+      "newsarticle": 30,
+      "opinionnewsarticle": 30,
+      "reportagearticle": 26,
+      "analysisnewsarticle": 26,
+      "webpage": 18,
+      "blogposting": 18
+    },
+    "siteProfiles": []
+  },
+  "formatting": {
+    "idealParagraphLength": 420,
+    "maxParagraphLength": 620,
+    "minParagraphLength": 140,
+    "subtitleMaxLength": 90,
+    "subtitleMaxWords": 10,
+    "subtitleUppercaseRatio": 0.72,
+    "mergeShortParagraphThreshold": 90
+  }
+}

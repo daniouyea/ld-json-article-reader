@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "LD+JSON Article Reader",
+  "version": "0.1.0",
+  "description": "Extract article text from LD+JSON metadata and display it in a clean reading view.",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "LD+JSON Article Reader",
+    "default_popup": "popup.html"
+  },
+  "icons": {
+    "256": "icons/256.png",
+    "32": "icons/32.png",
+    "16": "icons/16.png"
+  }
+}
