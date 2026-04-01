@@ -167,7 +167,7 @@ function buildBlocksFromFlatText(text, formattingConfig) {
   });
 
   pushParagraph();
-  return mergeShortParagraphs(blocks, formattingConfig.mergeShortParagraphThreshold).map((block, index) => ({
+  return normalizeBlocks(mergeShortParagraphs(blocks, formattingConfig.mergeShortParagraphThreshold)).map((block, index) => ({
     ...block,
     lead: block.kind === "paragraph" && index === 0
   }));
@@ -183,8 +183,33 @@ function buildBlocksFromFlatText(text, formattingConfig) {
 }
 
 function splitIntoSentences(text) {
-  const parts = text.match(/[^.!?]+(?:[.!?]+|$)/g) || [];
-  return parts.map((part) => part.replace(/\s+/g, " ").trim()).filter(Boolean);
+  const sentences = [];
+  let currentSentence = "";
+
+  for (let index = 0; index < text.length; index += 1) {
+    const char = text[index];
+    currentSentence += char;
+
+    if (!isSentenceBoundary(text, index)) {
+      continue;
+    }
+
+    const normalizedSentence = currentSentence.replace(/\s+/g, " ").trim();
+
+    if (normalizedSentence) {
+      sentences.push(normalizedSentence);
+    }
+
+    currentSentence = "";
+  }
+
+  const trailingText = currentSentence.replace(/\s+/g, " ").trim();
+
+  if (trailingText) {
+    sentences.push(trailingText);
+  }
+
+  return sentences;
 }
 
 function mergeShortParagraphs(blocks, threshold) {
@@ -208,6 +233,25 @@ function mergeShortParagraphs(blocks, threshold) {
     merged.push(block);
     return merged;
   }, []);
+}
+
+function normalizeBlocks(blocks) {
+  return blocks.map((block, index) => {
+    if (block.kind !== "subtitle") {
+      return block;
+    }
+
+    const previousBlock = blocks[index - 1];
+
+    if (previousBlock?.kind === "subtitle") {
+      return {
+        kind: "paragraph",
+        text: block.text
+      };
+    }
+
+    return block;
+  });
 }
 
 function looksLikeSubtitle(text, formattingConfig) {
@@ -248,4 +292,25 @@ function getUppercaseWordRatio(words) {
   });
 
   return uppercaseWords.length / lexicalWords.length;
+}
+
+function isSentenceBoundary(text, index) {
+  const char = text[index];
+
+  if (![".", "!", "?", "…"].includes(char)) {
+    return false;
+  }
+
+  const nextChar = text[index + 1] || "";
+
+  if (!nextChar) {
+    return true;
+  }
+
+  if (!/\s/.test(nextChar)) {
+    return false;
+  }
+
+  const rest = text.slice(index + 1);
+  return /^\s+["'“”‘’(\[]*[\p{Lu}\d]/u.test(rest) || /^\s*$/u.test(rest);
 }
